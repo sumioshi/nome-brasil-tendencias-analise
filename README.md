@@ -1,10 +1,19 @@
 # Nome Brasil Tendências Análise
 
+
+
+Natanael Figueredo Balbo - 220141852
+Rodrigo Shodi Sumioshi - 220141912
+Vinicius Luiz Santa Rosa - 240421212
+
+
 Uma aplicação web para analisar e visualizar tendências de popularidade de nomes no Brasil, utilizando dados demográficos (ex: IBGE).
 
 ## Tecnologias Utilizadas
 
 Este projeto foi construído com:
+
+
 
 *   Vite
 *   TypeScript
