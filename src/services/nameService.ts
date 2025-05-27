@@ -1,3 +1,4 @@
+
 import { NameFrequency, NameRanking } from "./ibgeService";
 
 export interface ProcessedNameData {
@@ -53,9 +54,8 @@ export const processNameRankingData = (data: NameRanking[]): RankingData[] => {
   
   if (data.length === 0) return result;
   
-  // A API de ranking por localidade retorna dados gerais (todos os períodos consolidados)
-  // não há separação por período específico nesta API
-  const names = data[0].res.slice(0, 3).map((item) => ({
+  // Processar TODOS os nomes retornados pela API, não apenas os 3 primeiros
+  const names = data[0].res.map((item) => ({
     name: item.nome,
     frequency: item.frequencia,
     ranking: item.ranking,
@@ -63,7 +63,7 @@ export const processNameRankingData = (data: NameRanking[]): RankingData[] => {
   
   result.push({
     period: "Todos os períodos",
-    names: names,
+    names: names, // Removido o slice(0, 3) que limitava a apenas 3 nomes
   });
   
   return result;
