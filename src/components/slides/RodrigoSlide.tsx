@@ -44,7 +44,7 @@ const RodrigoSlide: React.FC = () => {
               {/* Component Code Block */}
               <div className="bg-slate-800 rounded-lg p-2 sm:p-3 ml-3 sm:ml-6 overflow-x-auto">
                 <div className="text-green-400 mb-1 sm:mb-2 text-xs sm:text-sm">// React Component</div>
-                <div className="text-purple-300 min-w-max">const <span className="text-blue-300">NameEvolution</span> = () => {`{`}</div>
+                <div className="text-purple-300 min-w-max">const <span className="text-blue-300">NameEvolution</span> = () =&gt; {`{`}</div>
                 <div className="ml-2 sm:ml-4 space-y-1 min-w-max">
                   <div className="text-orange-300 text-xs sm:text-sm">const [name, setName] = useState&lt;string&gt;('');</div>
                   <div className="text-orange-300 text-xs sm:text-sm">const [chartData, setChartData] = useState&lt;any[]&gt;([]);</div>
@@ -67,7 +67,7 @@ const RodrigoSlide: React.FC = () => {
                   <div className="text-orange-300 text-xs sm:text-sm">name: string,</div>
                   <div className="text-orange-300 text-xs sm:text-sm">period: string</div>
                 </div>
-                <div className="text-blue-300 min-w-max">) => Promise&lt;NameFrequency[]&gt;</div>
+                <div className="text-blue-300 min-w-max">) =&gt; Promise&lt;NameFrequency[]&gt;</div>
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ const RodrigoSlide: React.FC = () => {
                 <div className="text-green-400 mb-1 sm:mb-2 text-xs sm:text-sm">// Data Transformation</div>
                 <div className="text-blue-300 min-w-max">export const <span className="text-yellow-300">processNameFrequencyData</span> = (</div>
                 <div className="ml-2 sm:ml-4 text-orange-300 text-xs sm:text-sm min-w-max">data: NameFrequency[]</div>
-                <div className="text-blue-300 min-w-max">) => ProcessedNameData[]</div>
+                <div className="text-blue-300 min-w-max">) =&gt; ProcessedNameData[]</div>
               </div>
             </div>
           </div>

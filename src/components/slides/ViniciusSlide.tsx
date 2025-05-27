@@ -44,7 +44,7 @@ const ViniciusSlide: React.FC = () => {
               {/* Component Code Block */}
               <div className="bg-slate-800 rounded-lg p-3 ml-6">
                 <div className="text-green-400 mb-2">// React Component</div>
-                <div className="text-purple-300">const <span className="text-orange-300">NameComparison</span> = () => {`{`}</div>
+                <div className="text-purple-300">const <span className="text-orange-300">NameComparison</span> = () =&gt; {`{`}</div>
                 <div className="ml-4 space-y-1">
                   <div className="text-orange-300">const [name1, setName1] = useState&lt;string&gt;('');</div>
                   <div className="text-orange-300">const [name2, setName2] = useState&lt;string&gt;('');</div>
@@ -67,7 +67,7 @@ const ViniciusSlide: React.FC = () => {
                 <div className="ml-4">
                   <div className="text-orange-300">name: string</div>
                 </div>
-                <div className="text-blue-300">) => Promise&lt;NameFrequency[]&gt;</div>
+                <div className="text-blue-300">) =&gt; Promise&lt;NameFrequency[]&gt;</div>
               </div>
             </div>
           </div>
@@ -94,10 +94,10 @@ const ViniciusSlide: React.FC = () => {
               {/* Data Merging Algorithm */}
               <div className="bg-slate-800 rounded-lg p-3">
                 <div className="text-green-400 mb-2">// Data Merge Algorithm</div>
-                <div className="text-purple-300">processedData1[0].data.<span className="text-yellow-300">forEach</span>((item) => {`{`}</div>
+                <div className="text-purple-300">processedData1[0].data.<span className="text-yellow-300">forEach</span>((item) =&gt; {`{`}</div>
                 <div className="ml-4 space-y-1">
                   <div className="text-orange-300">const matchingItem = processedData2[0].data</div>
-                  <div className="text-orange-300">  .<span className="text-yellow-300">find</span>(i => i.period === item.period);</div>
+                  <div className="text-orange-300">  .<span className="text-yellow-300">find</span>(i =&gt; i.period === item.period);</div>
                   <div className="text-blue-300">mergedData.<span className="text-yellow-300">push</span>({`{`}</div>
                   <div className="ml-4 space-y-1">
                     <div className="text-green-300">period: item.period,</div>
@@ -120,7 +120,7 @@ const ViniciusSlide: React.FC = () => {
                 <div className="text-green-400 mb-2">// Data Transformation</div>
                 <div className="text-blue-300">export const <span className="text-yellow-300">processNameFrequencyData</span> = (</div>
                 <div className="ml-4 text-orange-300">data: NameFrequency[]</div>
-                <div className="text-blue-300">) => ProcessedNameData[]</div>
+                <div className="text-blue-300">) =&gt; ProcessedNameData[]</div>
               </div>
             </div>
           </div>

@@ -13,6 +13,7 @@ import Header from '@/components/Header';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { useFullscreen } from '@/hooks/useFullscreen';
 import FullscreenButton from '@/components/FullscreenButton';
+import ScrollableSlideContainer from '@/components/ScrollableSlideContainer';
 import IntroSlide from '../components/slides/IntroSlide';
 import RodrigoSlide from '../components/slides/RodrigoSlide';
 import NatanaelSlide from '../components/slides/NatanaelSlide';
@@ -41,6 +42,73 @@ const Apresentacao: React.FC = () => {
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1);
     });
+  }, [api]);
+
+  // Navegação por teclado melhorada
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!api) return;
+
+      // Função para encontrar o container de scroll ativo
+      const getActiveScrollContainer = () => {
+        const activeCarouselItem = document.querySelector('[data-carousel-item="active"]');
+        return activeCarouselItem?.querySelector('.scrollable-container') as HTMLElement;
+      };
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          api.scrollPrev();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          api.scrollNext();
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          // Scroll para cima no slide atual
+          const containerUp = getActiveScrollContainer();
+          if (containerUp) {
+            containerUp.scrollBy({ top: -100, behavior: 'smooth' });
+          }
+          break;
+        case 'ArrowDown':
+          event.preventDefault();
+          // Scroll para baixo no slide atual
+          const containerDown = getActiveScrollContainer();
+          if (containerDown) {
+            containerDown.scrollBy({ top: 100, behavior: 'smooth' });
+          }
+          break;
+        case 'Home':
+          event.preventDefault();
+          api.scrollTo(0);
+          break;
+        case 'End':
+          event.preventDefault();
+          api.scrollTo(api.scrollSnapList().length - 1);
+          break;
+        case 'PageUp':
+          event.preventDefault();
+          // Scroll para cima no slide atual (mais rápido)
+          const currentSlideUp = getActiveScrollContainer();
+          if (currentSlideUp) {
+            currentSlideUp.scrollBy({ top: -window.innerHeight * 0.8, behavior: 'smooth' });
+          }
+          break;
+        case 'PageDown':
+          event.preventDefault();
+          // Scroll para baixo no slide atual (mais rápido)
+          const currentSlideDown = getActiveScrollContainer();
+          if (currentSlideDown) {
+            currentSlideDown.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+          }
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [api]);
 
   const slides = [
@@ -144,35 +212,62 @@ const Apresentacao: React.FC = () => {
                 className="w-full h-full"
                 opts={{ loop: true }}
               >
-                <CarouselContent className="h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh]">
+                <CarouselContent className={
+                  isFullscreen
+                    ? "h-[calc(100vh-8rem)] sm:h-[calc(100vh-6rem)]"
+                    : "h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh]"
+                }>
                   <CarouselItem className="h-full flex items-start justify-center">
-                    <IntroSlide />
+                    <ScrollableSlideContainer isFullscreen={isFullscreen}>
+                      <IntroSlide />
+                    </ScrollableSlideContainer>
                   </CarouselItem>
                   <CarouselItem className="h-full flex items-start justify-center">
-                    <RodrigoSlide />
+                    <ScrollableSlideContainer isFullscreen={isFullscreen}>
+                      <RodrigoSlide />
+                    </ScrollableSlideContainer>
                   </CarouselItem>
                   <CarouselItem className="h-full flex items-start justify-center">
-                    <NatanaelSlide />
+                    <ScrollableSlideContainer isFullscreen={isFullscreen}>
+                      <NatanaelSlide />
+                    </ScrollableSlideContainer>
                   </CarouselItem>
                   <CarouselItem className="h-full flex items-start justify-center">
-                    <ViniciusSlide />
+                    <ScrollableSlideContainer isFullscreen={isFullscreen}>
+                      <ViniciusSlide />
+                    </ScrollableSlideContainer>
                   </CarouselItem>
                 </CarouselContent>
 
                 {/* Botões de Navegação Melhorados */}
-                <CarouselPrevious className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/90 dark:bg-slate-700/90 hover:bg-white dark:hover:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-200" />
-                <CarouselNext className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/90 dark:bg-slate-700/90 hover:bg-white dark:hover:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-200" />
+                <CarouselPrevious className={`absolute top-1/2 -translate-y-1/2 z-40 bg-white/90 dark:bg-slate-700/90 hover:bg-white dark:hover:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-200 ${
+                  isFullscreen
+                    ? 'left-4 w-10 h-10 sm:w-12 sm:h-12'
+                    : 'left-2 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12'
+                }`} />
+                <CarouselNext className={`absolute top-1/2 -translate-y-1/2 z-40 bg-white/90 dark:bg-slate-700/90 hover:bg-white dark:hover:bg-slate-700 border-2 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 shadow-lg hover:shadow-xl transition-all duration-200 ${
+                  isFullscreen
+                    ? 'right-4 w-10 h-10 sm:w-12 sm:h-12'
+                    : 'right-2 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12'
+                }`} />
               </Carousel>
             </div>
           </div>
 
           {/* Navegação por Teclado - Instruções */}
-          <div className="text-center mt-2 sm:mt-4 px-2">
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-              Use as setas ← → do teclado ou clique nos botões para navegar
+          <div className={`text-center px-2 ${isFullscreen ? 'mt-1 sm:mt-2' : 'mt-2 sm:mt-4'}`}>
+            <p className={`text-gray-500 dark:text-gray-400 ${
+              isFullscreen ? 'text-xs' : 'text-xs sm:text-sm'
+            }`}>
+              <span className="font-medium">Navegação:</span> ← → (slides) • ↑ ↓ (scroll) • PgUp/PgDn (scroll rápido)
+              {isFullscreen && ' • ESC (sair do modo cinema)'}
             </p>
-            <div className="flex justify-center items-center mt-1 sm:mt-2 space-x-2">
-              <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-300">
+            <div className={`flex justify-center items-center space-x-2 ${
+              isFullscreen ? 'mt-1' : 'mt-1 sm:mt-2'
+            }`}>
+              <span className={`font-medium text-gray-600 dark:text-gray-300 ${
+                isFullscreen ? 'text-xs' : 'text-xs sm:text-sm'
+              }`}>
                 Slide {current} de {count}
               </span>
             </div>

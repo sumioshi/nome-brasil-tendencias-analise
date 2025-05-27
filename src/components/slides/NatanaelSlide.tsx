@@ -44,7 +44,7 @@ const NatanaelSlide: React.FC = () => {
               {/* Component Code Block */}
               <div className="bg-slate-800 rounded-lg p-2 sm:p-3 ml-3 sm:ml-6 overflow-x-auto">
                 <div className="text-green-400 mb-1 sm:mb-2 text-xs sm:text-sm">// React Component</div>
-                <div className="text-purple-300 min-w-max">const <span className="text-green-300">LocationNames</span> = () => {`{`}</div>
+                <div className="text-purple-300 min-w-max">const <span className="text-green-300">LocationNames</span> = () =&gt; {`{`}</div>
                 <div className="ml-2 sm:ml-4 space-y-1 min-w-max">
                   <div className="text-orange-300 text-xs sm:text-sm">const [filterType, setFilterType] = useState&lt;'uf' | 'city'&gt;('uf');</div>
                   <div className="text-orange-300 text-xs sm:text-sm">const [selectedUF, setSelectedUF] = useState&lt;string&gt;('');</div>
@@ -67,7 +67,7 @@ const NatanaelSlide: React.FC = () => {
                 <div className="ml-2 sm:ml-4 min-w-max">
                   <div className="text-orange-300 text-xs sm:text-sm">location: string</div>
                 </div>
-                <div className="text-blue-300 min-w-max">) => Promise&lt;NameRanking[]&gt;</div>
+                <div className="text-blue-300 min-w-max">) =&gt; Promise&lt;NameRanking[]&gt;</div>
               </div>
             </div>
           </div>
@@ -123,7 +123,7 @@ const NatanaelSlide: React.FC = () => {
                 <div className="text-green-400 mb-2">// Data Processing</div>
                 <div className="text-blue-300">export const <span className="text-yellow-300">processNameRankingData</span> = (</div>
                 <div className="ml-4 text-orange-300">data: NameRanking[]</div>
-                <div className="text-blue-300">) => RankingData[]</div>
+                <div className="text-blue-300">) =&gt; RankingData[]</div>
               </div>
             </div>
           </div>
