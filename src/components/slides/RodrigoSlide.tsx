@@ -25,10 +25,6 @@ const RodrigoSlide: React.FC = () => {
           <p>
             O sistema então processa esses dados e exibe a evolução do ranking do nome no período especificado, geralmente utilizando um gráfico de linhas ou barras para facilitar a visualização da tendência.
           </p>
-          <p className="mt-4 pt-4 border-t border-slate-300 dark:border-slate-700">
-            <strong>Comunicação com o Backend:</strong><br />
-            No backend, esta funcionalidade se conecta a um serviço que recebe o nome e o intervalo de décadas. Este serviço, por sua vez, consulta a base de dados de nomes e retorna uma série histórica com a popularidade do nome ao longo do tempo. A comunicação é feita via uma API REST, por exemplo, através de um endpoint como: <code>GET /api/nome/{nome}/evolucao?decadaInicio={'{inicio}'}&decadaFim={'{fim}'}</code>.
-          </p>
         </div>
       </div>
     </div>

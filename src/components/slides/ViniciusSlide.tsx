@@ -25,10 +25,6 @@ const ViniciusSlide: React.FC = () => {
           <p>
             O sistema então analisa e exibe a trajetória de popularidade de ambos os nomes em todo o Brasil, desde a década de 1930 até a década mais recente para a qual existem dados disponíveis. Essa comparação é visualizada por meio de um gráfico, facilitando a compreensão das tendências e da performance relativa de cada nome ao longo do tempo.
           </p>
-          <p className="mt-4 pt-4 border-t border-slate-300 dark:border-slate-700">
-            <strong>Comunicação com o Backend:</strong><br />
-            No backend, para realizar a comparação, o sistema envia os dois nomes para um serviço dedicado. Este serviço consulta a base de dados nacional, coleta os dados de popularidade de ambos os nomes ao longo das décadas e os retorna para o frontend. A comunicação ocorre através de uma API REST, utilizando um endpoint como: <code>GET /api/comparacao/nacional?nome1={'{nomeA}'}&nome2={'{nomeB}'}</code>.
-          </p>
         </div>
       </div>
     </div>
