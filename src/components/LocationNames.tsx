@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Loading from './Loading';
 import { getNameRankingByLocation } from '@/services/ibgeService';
@@ -19,6 +24,8 @@ const LocationNames: React.FC = () => {
   const [filterType, setFilterType] = useState<'uf' | 'city'>('uf');
   const [customCode, setCustomCode] = useState<string>('');
   const [rankingLimit, setRankingLimit] = useState<string>('10');
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
   const [rankingData, setRankingData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [locationName, setLocationName] = useState<string>('');
@@ -192,7 +199,17 @@ const LocationNames: React.FC = () => {
       
       setRankingData([limitedData]);
       setLocationName(displayName);
-      toast.success(`Dados carregados com sucesso para ${displayName}`);
+      
+      // Adicionar informação sobre filtro de datas na mensagem de sucesso
+      let successMessage = `Dados carregados com sucesso para ${displayName}`;
+      if (startDate || endDate) {
+        const dateInfo = [];
+        if (startDate) dateInfo.push(`desde ${format(startDate, 'dd/MM/yyyy', { locale: ptBR })}`);
+        if (endDate) dateInfo.push(`até ${format(endDate, 'dd/MM/yyyy', { locale: ptBR })}`);
+        successMessage += ` (${dateInfo.join(' ')})`;
+      }
+      
+      toast.success(successMessage);
       
     } catch (error) {
       console.error('Error fetching location names data:', error);
@@ -212,6 +229,9 @@ const LocationNames: React.FC = () => {
     setSelectedUF('');
     setSelectedCity('');
     setCustomCode('');
+    setRankingLimit('10');
+    setStartDate(undefined);
+    setEndDate(undefined);
     setRankingData([]);
     setLocationName('');
   };
@@ -340,23 +360,110 @@ const LocationNames: React.FC = () => {
 
           <Separator />
 
-          {/* Seção: Configurações do Ranking */}
+          {/* Seção: Configurações do Ranking e Período */}
           <div className="space-y-4">
-            <Label className="text-base font-semibold">3. Configure o ranking</Label>
-            <div className="space-y-2">
-              <Label htmlFor="ranking-limit" className="text-sm font-medium">Quantidade de nomes no ranking</Label>
-              <Select value={rankingLimit} onValueChange={setRankingLimit}>
-                <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="Selecione" />
-                </SelectTrigger>
-                <SelectContent>
-                  {rankingOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <Label className="text-base font-semibold">3. Configure o ranking e período</Label>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Quantidade de nomes no ranking */}
+              <div className="space-y-2">
+                <Label htmlFor="ranking-limit" className="text-sm font-medium">Quantidade de nomes no ranking</Label>
+                <Select value={rankingLimit} onValueChange={setRankingLimit}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {rankingOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Filtro de Período */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium">Filtro de período (opcional)</Label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Data de início */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-gray-600">Data de início</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {startDate ? format(startDate, "dd/MM/yyyy", { locale: ptBR }) : "Selecione uma data"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={setStartDate}
+                        disabled={(date) => date > new Date() || (endDate && date > endDate)}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Data de fim */}
+                <div className="space-y-2">
+                  <Label className="text-xs text-gray-600">Data de fim</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {endDate ? format(endDate, "dd/MM/yyyy", { locale: ptBR }) : "Selecione uma data"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                        disabled={(date) => date > new Date() || (startDate && date < startDate)}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+              
+              {/* Botão para limpar datas */}
+              {(startDate || endDate) && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => {
+                    setStartDate(undefined);
+                    setEndDate(undefined);
+                  }}
+                  className="text-xs"
+                >
+                  Limpar período
+                </Button>
+              )}
+              
+              <div className="text-xs text-gray-500 bg-blue-50 p-2 rounded">
+                <p><strong>Dica:</strong> O filtro de período será aplicado aos dados disponíveis. Se não especificado, serão exibidos dados consolidados de todos os períodos.</p>
+              </div>
             </div>
           </div>
 
@@ -392,11 +499,19 @@ const LocationNames: React.FC = () => {
                 </h3>
                 <div className="text-sm text-gray-500">
                   Mostrando top {rankingLimit} nomes
+                  {(startDate || endDate) && (
+                    <div className="text-xs mt-1">
+                      {startDate && `De: ${format(startDate, 'dd/MM/yyyy', { locale: ptBR })}`}
+                      {startDate && endDate && ' • '}
+                      {endDate && `Até: ${format(endDate, 'dd/MM/yyyy', { locale: ptBR })}`}
+                    </div>
+                  )}
                 </div>
               </div>
               <Table>
                 <TableCaption>
-                  Ranking dos {rankingLimit} nomes mais populares na localidade selecionada (dados consolidados)
+                  Ranking dos {rankingLimit} nomes mais populares na localidade selecionada
+                  {(startDate || endDate) && ' no período especificado'}
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
