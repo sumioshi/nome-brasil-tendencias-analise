@@ -1,4 +1,3 @@
-
 import { NameFrequency, NameRanking } from "./ibgeService";
 
 export interface ProcessedNameData {
@@ -54,30 +53,20 @@ export const processNameRankingData = (data: NameRanking[]): RankingData[] => {
   
   if (data.length === 0) return result;
   
-  // Group by period
-  const namesByPeriod: Record<string, any[]> = {};
+  // A API de ranking por localidade retorna dados gerais (todos os períodos consolidados)
+  // não há separação por período específico nesta API
+  const names = data[0].res.slice(0, 3).map((item) => ({
+    name: item.nome,
+    frequency: item.frequencia,
+    ranking: item.ranking,
+  }));
   
-  data[0].res.forEach((item) => {
-    if (!namesByPeriod[item.periodo]) {
-      namesByPeriod[item.periodo] = [];
-    }
-    
-    namesByPeriod[item.periodo].push({
-      name: item.nome,
-      frequency: item.frequencia,
-      ranking: item.ranking,
-    });
+  result.push({
+    period: "Todos os períodos",
+    names: names,
   });
   
-  // Convert to array format
-  Object.entries(namesByPeriod).forEach(([period, names]) => {
-    result.push({
-      period: formatPeriod(period),
-      names: names.slice(0, 3), // Get top 3 names
-    });
-  });
-  
-  return result.sort((a, b) => a.period.localeCompare(b.period));
+  return result;
 };
 
 /**
