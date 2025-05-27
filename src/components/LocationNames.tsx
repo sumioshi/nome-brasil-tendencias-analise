@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import Loading from './Loading';
 import { getNameRankingByLocation } from '@/services/ibgeService';
@@ -17,39 +18,45 @@ const LocationNames: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [filterType, setFilterType] = useState<'uf' | 'city'>('uf');
   const [customCode, setCustomCode] = useState<string>('');
+  const [rankingLimit, setRankingLimit] = useState<string>('10');
   const [rankingData, setRankingData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [locationName, setLocationName] = useState<string>('');
 
-  // Estados com seus códigos corretos
+  // Estados brasileiros organizados por região
   const states = [
-    { code: '11', name: 'Rondônia', uf: 'RO' },
-    { code: '12', name: 'Acre', uf: 'AC' },
-    { code: '13', name: 'Amazonas', uf: 'AM' },
-    { code: '14', name: 'Roraima', uf: 'RR' },
-    { code: '15', name: 'Pará', uf: 'PA' },
-    { code: '16', name: 'Amapá', uf: 'AP' },
-    { code: '17', name: 'Tocantins', uf: 'TO' },
-    { code: '21', name: 'Maranhão', uf: 'MA' },
-    { code: '22', name: 'Piauí', uf: 'PI' },
-    { code: '23', name: 'Ceará', uf: 'CE' },
-    { code: '24', name: 'Rio Grande do Norte', uf: 'RN' },
-    { code: '25', name: 'Paraíba', uf: 'PB' },
-    { code: '26', name: 'Pernambuco', uf: 'PE' },
-    { code: '27', name: 'Alagoas', uf: 'AL' },
-    { code: '28', name: 'Sergipe', uf: 'SE' },
-    { code: '29', name: 'Bahia', uf: 'BA' },
-    { code: '31', name: 'Minas Gerais', uf: 'MG' },
-    { code: '32', name: 'Espírito Santo', uf: 'ES' },
-    { code: '33', name: 'Rio de Janeiro', uf: 'RJ' },
-    { code: '35', name: 'São Paulo', uf: 'SP' },
-    { code: '41', name: 'Paraná', uf: 'PR' },
-    { code: '42', name: 'Santa Catarina', uf: 'SC' },
-    { code: '43', name: 'Rio Grande do Sul', uf: 'RS' },
-    { code: '50', name: 'Mato Grosso do Sul', uf: 'MS' },
-    { code: '51', name: 'Mato Grosso', uf: 'MT' },
-    { code: '52', name: 'Goiás', uf: 'GO' },
-    { code: '53', name: 'Distrito Federal', uf: 'DF' },
+    // Norte
+    { code: '11', name: 'Rondônia', uf: 'RO', region: 'Norte' },
+    { code: '12', name: 'Acre', uf: 'AC', region: 'Norte' },
+    { code: '13', name: 'Amazonas', uf: 'AM', region: 'Norte' },
+    { code: '14', name: 'Roraima', uf: 'RR', region: 'Norte' },
+    { code: '15', name: 'Pará', uf: 'PA', region: 'Norte' },
+    { code: '16', name: 'Amapá', uf: 'AP', region: 'Norte' },
+    { code: '17', name: 'Tocantins', uf: 'TO', region: 'Norte' },
+    // Nordeste
+    { code: '21', name: 'Maranhão', uf: 'MA', region: 'Nordeste' },
+    { code: '22', name: 'Piauí', uf: 'PI', region: 'Nordeste' },
+    { code: '23', name: 'Ceará', uf: 'CE', region: 'Nordeste' },
+    { code: '24', name: 'Rio Grande do Norte', uf: 'RN', region: 'Nordeste' },
+    { code: '25', name: 'Paraíba', uf: 'PB', region: 'Nordeste' },
+    { code: '26', name: 'Pernambuco', uf: 'PE', region: 'Nordeste' },
+    { code: '27', name: 'Alagoas', uf: 'AL', region: 'Nordeste' },
+    { code: '28', name: 'Sergipe', uf: 'SE', region: 'Nordeste' },
+    { code: '29', name: 'Bahia', uf: 'BA', region: 'Nordeste' },
+    // Sudeste
+    { code: '31', name: 'Minas Gerais', uf: 'MG', region: 'Sudeste' },
+    { code: '32', name: 'Espírito Santo', uf: 'ES', region: 'Sudeste' },
+    { code: '33', name: 'Rio de Janeiro', uf: 'RJ', region: 'Sudeste' },
+    { code: '35', name: 'São Paulo', uf: 'SP', region: 'Sudeste' },
+    // Sul
+    { code: '41', name: 'Paraná', uf: 'PR', region: 'Sul' },
+    { code: '42', name: 'Santa Catarina', uf: 'SC', region: 'Sul' },
+    { code: '43', name: 'Rio Grande do Sul', uf: 'RS', region: 'Sul' },
+    // Centro-Oeste
+    { code: '50', name: 'Mato Grosso do Sul', uf: 'MS', region: 'Centro-Oeste' },
+    { code: '51', name: 'Mato Grosso', uf: 'MT', region: 'Centro-Oeste' },
+    { code: '52', name: 'Goiás', uf: 'GO', region: 'Centro-Oeste' },
+    { code: '53', name: 'Distrito Federal', uf: 'DF', region: 'Centro-Oeste' },
   ];
 
   // Principais cidades por estado
@@ -101,14 +108,20 @@ const LocationNames: React.FC = () => {
     ],
   };
 
+  const rankingOptions = [
+    { value: '3', label: 'Top 3' },
+    { value: '5', label: 'Top 5' },
+    { value: '10', label: 'Top 10' },
+    { value: '20', label: 'Top 20' },
+    { value: '50', label: 'Top 50' },
+  ];
+
   const validateLocationCode = (code: string): boolean => {
     const trimmedCode = code.trim();
-    // UF codes: 2 digits (11-99)
     if (trimmedCode.length === 2 && /^\d{2}$/.test(trimmedCode)) {
       const numCode = parseInt(trimmedCode);
       return numCode >= 11 && numCode <= 99;
     }
-    // Municipality codes: 7 digits
     if (trimmedCode.length === 7 && /^\d{7}$/.test(trimmedCode)) {
       return true;
     }
@@ -128,7 +141,6 @@ const LocationNames: React.FC = () => {
       displayName = state ? `${state.name} (${state.uf})` : `Estado ${selectedUF}`;
     } else if (filterType === 'city' && selectedCity) {
       locationCode = selectedCity;
-      // Encontrar o nome da cidade
       for (const stateCode in citiesByState) {
         const city = citiesByState[stateCode].find(c => c.code === selectedCity);
         if (city) {
@@ -172,7 +184,13 @@ const LocationNames: React.FC = () => {
         return;
       }
       
-      setRankingData(processedData);
+      // Aplicar filtro de ranking
+      const limitedData = {
+        ...processedData[0],
+        names: processedData[0].names.slice(0, parseInt(rankingLimit))
+      };
+      
+      setRankingData([limitedData]);
       setLocationName(displayName);
       toast.success(`Dados carregados com sucesso para ${displayName}`);
       
@@ -190,6 +208,14 @@ const LocationNames: React.FC = () => {
     return citiesByState[selectedUF] || [];
   };
 
+  const resetFilters = () => {
+    setSelectedUF('');
+    setSelectedCity('');
+    setCustomCode('');
+    setRankingData([]);
+    setLocationName('');
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -200,115 +226,159 @@ const LocationNames: React.FC = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {/* Tipo de filtro */}
-          <div>
-            <Label>Tipo de Consulta</Label>
+          {/* Seção: Tipo de Consulta */}
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">1. Escolha o tipo de consulta</Label>
             <RadioGroup 
               value={filterType} 
               onValueChange={(value) => {
                 setFilterType(value as 'uf' | 'city');
-                setSelectedUF('');
-                setSelectedCity('');
-                setCustomCode('');
+                resetFilters();
               }}
-              className="flex gap-6 mt-2"
+              className="grid grid-cols-2 gap-4"
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                 <RadioGroupItem value="uf" id="uf" />
-                <Label htmlFor="uf">Por Estado (UF)</Label>
+                <Label htmlFor="uf" className="cursor-pointer flex-1">
+                  <div className="font-medium">Por Estado (UF)</div>
+                  <div className="text-sm text-gray-500">Consultar dados de um estado inteiro</div>
+                </Label>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                 <RadioGroupItem value="city" id="city" />
-                <Label htmlFor="city">Por Cidade</Label>
+                <Label htmlFor="city" className="cursor-pointer flex-1">
+                  <div className="font-medium">Por Cidade</div>
+                  <div className="text-sm text-gray-500">Consultar dados de uma cidade específica</div>
+                </Label>
               </div>
             </RadioGroup>
           </div>
 
-          {/* Seleção de Estado */}
-          {filterType === 'uf' && (
-            <div>
-              <Label htmlFor="state">Estado</Label>
-              <Select onValueChange={setSelectedUF} value={selectedUF}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um estado" />
-                </SelectTrigger>
-                <SelectContent>
-                  {states.map((state) => (
-                    <SelectItem key={state.code} value={state.code}>
-                      {state.name} ({state.uf})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
+          <Separator />
 
-          {/* Seleção de Cidade */}
-          {filterType === 'city' && (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="state-for-city">Primeiro selecione o Estado</Label>
-                <Select onValueChange={(value) => {
-                  setSelectedUF(value);
-                  setSelectedCity('');
-                }} value={selectedUF}>
+          {/* Seção: Seleção de Localidade */}
+          <div className="space-y-4">
+            <Label className="text-base font-semibold">2. Selecione a localidade</Label>
+            
+            {filterType === 'uf' && (
+              <div className="space-y-2">
+                <Label htmlFor="state" className="text-sm font-medium">Estado</Label>
+                <Select onValueChange={setSelectedUF} value={selectedUF}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione um estado" />
                   </SelectTrigger>
                   <SelectContent>
-                    {states.filter(state => citiesByState[state.code]).map((state) => (
+                    {states.map((state) => (
                       <SelectItem key={state.code} value={state.code}>
-                        {state.name} ({state.uf})
+                        {state.name} ({state.uf}) - {state.region}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              
-              {selectedUF && (
-                <div>
-                  <Label htmlFor="city">Cidade</Label>
-                  <Select onValueChange={setSelectedCity} value={selectedCity}>
+            )}
+
+            {filterType === 'city' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="state-for-city" className="text-sm font-medium">Primeiro selecione o Estado</Label>
+                  <Select onValueChange={(value) => {
+                    setSelectedUF(value);
+                    setSelectedCity('');
+                  }} value={selectedUF}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecione uma cidade" />
+                      <SelectValue placeholder="Selecione um estado" />
                     </SelectTrigger>
                     <SelectContent>
-                      {getCitiesForSelectedState().map((city) => (
-                        <SelectItem key={city.code} value={city.code}>
-                          {city.name}
+                      {states.filter(state => citiesByState[state.code]).map((state) => (
+                        <SelectItem key={state.code} value={state.code}>
+                          {state.name} ({state.uf})
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              )}
-            </div>
-          )}
+                
+                {selectedUF && (
+                  <div className="space-y-2">
+                    <Label htmlFor="city" className="text-sm font-medium">Cidade</Label>
+                    <Select onValueChange={setSelectedCity} value={selectedCity}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione uma cidade" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {getCitiesForSelectedState().map((city) => (
+                          <SelectItem key={city.code} value={city.code}>
+                            {city.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            )}
 
-          {/* Campo para código personalizado */}
-          <div>
-            <Label htmlFor="custom-code">Ou digite um código personalizado</Label>
-            <Input
-              id="custom-code"
-              placeholder="Ex: 33 (RJ) ou 3304557 (Rio de Janeiro)"
-              value={customCode}
-              onChange={(e) => setCustomCode(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            />
-            <div className="text-xs text-gray-500 mt-2">
-              <p><strong>Estados:</strong> 2 dígitos (ex: 33 para RJ, 35 para SP)</p>
-              <p><strong>Municípios:</strong> 7 dígitos (ex: 3304557 para Rio de Janeiro)</p>
+            {/* Código personalizado */}
+            <div className="space-y-2">
+              <Label htmlFor="custom-code" className="text-sm font-medium">
+                Ou digite um código IBGE personalizado
+              </Label>
+              <Input
+                id="custom-code"
+                placeholder="Ex: 33 (RJ) ou 3304557 (Rio de Janeiro)"
+                value={customCode}
+                onChange={(e) => setCustomCode(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
+                <p><strong>Estados:</strong> 2 dígitos (ex: 33 para RJ, 35 para SP)</p>
+                <p><strong>Municípios:</strong> 7 dígitos (ex: 3304557 para Rio de Janeiro)</p>
+              </div>
             </div>
           </div>
 
-          {/* Botão de busca */}
-          <Button 
-            onClick={handleSearch} 
-            className="w-full"
-            disabled={loading || (!customCode.trim() && !selectedUF && !selectedCity)}
-          >
-            {loading ? 'Buscando...' : 'Buscar Dados'}
-          </Button>
+          <Separator />
+
+          {/* Seção: Configurações do Ranking */}
+          <div className="space-y-4">
+            <Label className="text-base font-semibold">3. Configure o ranking</Label>
+            <div className="space-y-2">
+              <Label htmlFor="ranking-limit" className="text-sm font-medium">Quantidade de nomes no ranking</Label>
+              <Select value={rankingLimit} onValueChange={setRankingLimit}>
+                <SelectTrigger className="w-full md:w-48">
+                  <SelectValue placeholder="Selecione" />
+                </SelectTrigger>
+                <SelectContent>
+                  {rankingOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Botões de ação */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button 
+              onClick={handleSearch} 
+              className="flex-1 sm:flex-none"
+              disabled={loading || (!customCode.trim() && !selectedUF && !selectedCity)}
+            >
+              {loading ? 'Buscando...' : 'Buscar Dados'}
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={resetFilters}
+              className="flex-1 sm:flex-none"
+            >
+              Limpar Filtros
+            </Button>
+          </div>
         </div>
         
         <div className="mt-8">
@@ -316,12 +386,17 @@ const LocationNames: React.FC = () => {
             <Loading message="Buscando dados da localidade..." />
           ) : rankingData.length > 0 ? (
             <>
-              <h3 className="text-lg font-medium mb-4">
-                Ranking de Nomes - {locationName}
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">
+                  Ranking de Nomes - {locationName}
+                </h3>
+                <div className="text-sm text-gray-500">
+                  Mostrando top {rankingLimit} nomes
+                </div>
+              </div>
               <Table>
                 <TableCaption>
-                  Ranking dos nomes mais populares na localidade selecionada (dados consolidados)
+                  Ranking dos {rankingLimit} nomes mais populares na localidade selecionada (dados consolidados)
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
@@ -351,7 +426,7 @@ const LocationNames: React.FC = () => {
             <div className="flex flex-col items-center justify-center h-[300px] text-gray-500 border border-dashed border-gray-200 rounded-lg">
               <div className="text-center">
                 <p className="text-lg font-medium">Nenhum dado para exibir</p>
-                <p className="text-sm mt-2">Selecione uma localidade para ver o ranking de nomes</p>
+                <p className="text-sm mt-2">Configure os filtros acima e clique em "Buscar Dados"</p>
               </div>
             </div>
           )}
