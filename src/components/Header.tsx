@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 
 const Header: React.FC = () => {
@@ -18,7 +19,12 @@ const Header: React.FC = () => {
             Dados fornecidos pela API do IBGE
           </p>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center space-x-4">
+          <Link to="/apresentacao" className="text-slate-200 hover:text-white dark:text-slate-300 dark:hover:text-white transition-colors duration-200">
+            Apresentação
+          </Link>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
