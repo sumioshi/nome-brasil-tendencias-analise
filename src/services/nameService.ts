@@ -23,7 +23,9 @@ export interface RankingData {
  * @param data The raw name frequency data from IBGE API
  * @returns Processed data for charts
  */
-export const processNameFrequencyData = (data: NameFrequency[]): ProcessedNameData[] => {
+type ProcessNameFrequencyFn = (data: NameFrequency[]) => ProcessedNameData[];
+
+export const processNameFrequencyData: ProcessNameFrequencyFn = (data) => {
   return data.map((item) => {
     return {
       name: item.nome,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Presentation, Users, BarChart3, Home } from "lucide-react";
 import Header from '@/components/Header';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { useFullscreen } from '@/hooks/useFullscreen';
+import FullscreenButton from '@/components/FullscreenButton';
 import IntroSlide from '../components/slides/IntroSlide';
 import RodrigoSlide from '../components/slides/RodrigoSlide';
 import NatanaelSlide from '../components/slides/NatanaelSlide';
@@ -20,6 +22,13 @@ const Apresentacao: React.FC = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+  const presentationRef = useRef<HTMLDivElement>(null);
+
+  const {
+    isFullscreen,
+    toggleFullscreen,
+    isSupported: isFullscreenSupported
+  } = useFullscreen(presentationRef.current || undefined);
 
   useEffect(() => {
     if (!api) {
@@ -63,22 +72,44 @@ const Apresentacao: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-gray-100 to-stone-200 dark:from-slate-900 dark:via-gray-800 dark:to-stone-900">
-        <Header />
+      <div
+        ref={presentationRef}
+        className={`min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-gray-100 to-stone-200 dark:from-slate-900 dark:via-gray-800 dark:to-stone-900 ${
+          isFullscreen ? 'relative' : ''
+        }`}
+      >
+        {/* Header - oculto em fullscreen */}
+        {!isFullscreen && <Header />}
 
-        <main className="flex-1 container mx-auto py-6 px-4 flex flex-col">
+        {/* Botão Fullscreen */}
+        <FullscreenButton
+          isFullscreen={isFullscreen}
+          onToggleFullscreen={toggleFullscreen}
+          isSupported={isFullscreenSupported}
+          className={isFullscreen ? 'top-4 right-4' : 'top-20 right-4'}
+        />
+
+        <main className={`flex-1 container mx-auto flex flex-col ${
+          isFullscreen
+            ? 'py-4 px-2 sm:px-4 h-screen'
+            : 'py-6 px-4'
+        }`}>
           {/* Título Principal - Otimizado para Apresentação */}
-          <div className="text-center mb-4 sm:mb-6">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 sm:mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent leading-tight">
-              Sistema de Análise de Tendências de Nomes
-            </h1>
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 dark:text-gray-300 font-medium">
-              Dados fornecidos pela API do IBGE
-            </p>
-          </div>
+          {!isFullscreen && (
+            <div className="text-center mb-4 sm:mb-6">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 sm:mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent leading-tight">
+                Sistema de Análise de Tendências de Nomes
+              </h1>
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-gray-700 dark:text-gray-300 font-medium">
+                Dados fornecidos pela API do IBGE
+              </p>
+            </div>
+          )}
 
           {/* Indicador de Progresso */}
-          <div className="flex flex-wrap justify-center items-center mb-4 sm:mb-6 gap-2 sm:gap-3 lg:gap-4 px-2">
+          <div className={`flex flex-wrap justify-center items-center gap-2 sm:gap-3 lg:gap-4 px-2 ${
+            isFullscreen ? 'mb-2 sm:mb-3' : 'mb-4 sm:mb-6'
+          }`}>
             {slides.map((slide, index) => {
               const IconComponent = slide.icon;
               return (
@@ -88,10 +119,18 @@ const Apresentacao: React.FC = () => {
                     current === index + 1
                       ? `bg-gradient-to-r ${slide.color} text-white shadow-lg scale-105`
                       : 'bg-white/70 dark:bg-slate-700/70 text-gray-600 dark:text-gray-300'
-                  }`}
+                  } ${isFullscreen ? 'text-xs' : ''}`}
                 >
-                  <IconComponent className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 flex-shrink-0" />
-                  <span className="font-medium text-xs sm:text-sm lg:text-base whitespace-nowrap">{slide.presenter}</span>
+                  <IconComponent className={`flex-shrink-0 ${
+                    isFullscreen
+                      ? 'w-3 h-3 sm:w-4 sm:h-4'
+                      : 'w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5'
+                  }`} />
+                  <span className={`font-medium whitespace-nowrap ${
+                    isFullscreen
+                      ? 'text-xs sm:text-sm'
+                      : 'text-xs sm:text-sm lg:text-base'
+                  }`}>{slide.presenter}</span>
                 </div>
               );
             })}
