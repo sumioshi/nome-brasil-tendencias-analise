@@ -9,6 +9,12 @@ Vinicius Luiz Santa Rosa - 240421212
 
 Uma aplicação web para analisar e visualizar tendências de popularidade de nomes no Brasil, utilizando dados demográficos (ex: IBGE).
 
+## Página de Apresentação do Projeto
+
+Este projeto inclui uma página de apresentação dedicada que resume as principais funcionalidades do sistema de análise de tendências de nomes. É uma ótima maneira de obter uma visão geral rápida do que a aplicação oferece.
+
+Para visualizar a apresentação do projeto, inicie a aplicação localmente conforme as instruções abaixo e navegue até a rota `/apresentacao` em seu navegador.
+
 ## Tecnologias Utilizadas
 
 Este projeto foi construído com:
