@@ -75,7 +75,7 @@ const NameComparison: React.FC = () => {
   };
 
   return (
-    <Card className="card-enhanced rounded-2xl border-0 shadow-2xl relative overflow-hidden">
+    <Card className="card-enhanced rounded-2xl border-0 shadow-2xl relative overflow-hidden bg-white/95 dark:bg-slate-800/95">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/30 to-purple-50/30 dark:from-slate-800/95 dark:via-slate-700/30 dark:to-slate-600/30"></div>
       
@@ -83,14 +83,14 @@ const NameComparison: React.FC = () => {
         <CardTitle className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
           Comparação de Dois Nomes
         </CardTitle>
-        <CardDescription className="text-contrast-muted text-base">
+        <CardDescription className="text-slate-600 dark:text-slate-300 text-base">
           Compare a popularidade de dois nomes ao longo do tempo
         </CardDescription>
       </CardHeader>
       <CardContent className="relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="space-y-3">
-            <Label htmlFor="name1" className="text-sm font-semibold text-contrast">
+            <Label htmlFor="name1" className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Primeiro Nome
             </Label>
             <Input
@@ -98,11 +98,11 @@ const NameComparison: React.FC = () => {
               placeholder="Ex: Maria"
               value={name1}
               onChange={(e) => setName1(e.target.value)}
-              className="input-enhanced h-12 text-base rounded-xl"
+              className="input-enhanced h-12 text-base rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-500 placeholder:text-slate-500 dark:placeholder:text-slate-400"
             />
           </div>
           <div className="space-y-3">
-            <Label htmlFor="name2" className="text-sm font-semibold text-contrast">
+            <Label htmlFor="name2" className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               Segundo Nome
             </Label>
             <Input
@@ -110,7 +110,7 @@ const NameComparison: React.FC = () => {
               placeholder="Ex: Ana"
               value={name2}
               onChange={(e) => setName2(e.target.value)}
-              className="input-enhanced h-12 text-base rounded-xl"
+              className="input-enhanced h-12 text-base rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-500 placeholder:text-slate-500 dark:placeholder:text-slate-400"
             />
           </div>
           <div className="flex items-end">
@@ -124,7 +124,7 @@ const NameComparison: React.FC = () => {
           </div>
         </div>
         
-        <div className="mt-8 card-enhanced rounded-xl p-6">
+        <div className="mt-8 card-enhanced rounded-xl p-6 bg-white/95 dark:bg-slate-800/95">
           {loading ? (
             <Loading />
           ) : chartData.length > 0 ? (
@@ -184,10 +184,10 @@ const NameComparison: React.FC = () => {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-contrast-subtle">
+            <div className="flex flex-col items-center justify-center h-[400px] text-slate-500 dark:text-slate-400">
               <div className="text-6xl mb-4 opacity-40">📊</div>
-              <p className="text-lg font-medium text-contrast-muted">Nenhum dado para exibir</p>
-              <p className="text-sm mt-2 text-center max-w-md text-contrast-subtle">
+              <p className="text-lg font-medium text-slate-600 dark:text-slate-300">Nenhum dado para exibir</p>
+              <p className="text-sm mt-2 text-center max-w-md text-slate-500 dark:text-slate-400">
                 Informe dois nomes para visualizar o gráfico de comparação
               </p>
             </div>
