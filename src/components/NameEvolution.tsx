@@ -77,54 +77,54 @@ const NameEvolution: React.FC = () => {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Evolução do Ranking de um Nome</CardTitle>
-        <CardDescription>
+    <Card className="card-enhanced rounded-2xl border-0 shadow-2xl relative overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/30 to-purple-50/30 dark:from-slate-800/95 dark:via-slate-700/30 dark:to-slate-600/30"></div>
+      
+      <CardHeader className="relative z-10 pb-6">
+        <CardTitle className="text-2xl font-bold text-contrast">
+          Evolução do Ranking de um Nome
+        </CardTitle>
+        <CardDescription className="text-contrast-muted text-base">
           Informe um nome e defina um intervalo de décadas para analisar sua evolução
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="md:col-span-2">
-            <Label htmlFor="name">Nome</Label>
+      <CardContent className="relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="md:col-span-2 space-y-3">
+            <Label htmlFor="name" className="text-sm font-semibold text-contrast">Nome</Label>
             <Input
               id="name"
               placeholder="Ex: Maria, João, etc."
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className="input-enhanced h-12 text-base rounded-xl"
             />
           </div>
-          <div>
-            <Label htmlFor="startDecade">Década Inicial</Label>
-            <Select 
-              value={startDecade} 
-              onValueChange={setStartDecade}
-            >
-              <SelectTrigger id="startDecade">
+          <div className="space-y-3">
+            <Label htmlFor="startDecade" className="text-sm font-semibold text-contrast">Década Inicial</Label>
+            <Select value={startDecade} onValueChange={setStartDecade}>
+              <SelectTrigger id="startDecade" className="input-enhanced h-12 rounded-xl">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600">
                 {decadeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+                  <SelectItem key={option.value} value={option.value} className="text-contrast">
                     {option.label}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <Label htmlFor="endDecade">Década Final</Label>
-            <Select 
-              value={endDecade} 
-              onValueChange={setEndDecade}
-            >
-              <SelectTrigger id="endDecade">
+          <div className="space-y-3">
+            <Label htmlFor="endDecade" className="text-sm font-semibold text-contrast">Década Final</Label>
+            <Select value={endDecade} onValueChange={setEndDecade}>
+              <SelectTrigger id="endDecade" className="input-enhanced h-12 rounded-xl">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600">
                 {decadeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+                  <SelectItem key={option.value} value={option.value} className="text-contrast">
                     {option.label}
                   </SelectItem>
                 ))}
@@ -135,13 +135,13 @@ const NameEvolution: React.FC = () => {
         
         <Button 
           onClick={handleSearch} 
-          className="w-full md:w-auto"
+          className="btn-primary w-full md:w-auto h-12 px-8 rounded-xl font-semibold text-lg"
           disabled={loading}
         >
           Buscar Dados
         </Button>
         
-        <div className="mt-8 chart-container">
+        <div className="mt-8 card-enhanced rounded-xl p-6">
           {loading ? (
             <Loading />
           ) : chartData.length > 0 ? (
@@ -150,25 +150,50 @@ const NameEvolution: React.FC = () => {
                 data={chartData}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="period" />
-                <YAxis />
-                <Tooltip formatter={(value) => new Intl.NumberFormat('pt-BR').format(value as number)} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" className="dark:stroke-slate-600" />
+                <XAxis 
+                  dataKey="period" 
+                  stroke="#64748b"
+                  className="dark:stroke-slate-300"
+                  fontSize={12}
+                  fontWeight={500}
+                />
+                <YAxis 
+                  stroke="#64748b"
+                  className="dark:stroke-slate-300"
+                  fontSize={12}
+                  fontWeight={500}
+                />
+                <Tooltip 
+                  formatter={(value) => new Intl.NumberFormat('pt-BR').format(value as number)}
+                  contentStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    border: 'none',
+                    borderRadius: '12px',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    color: '#1e293b'
+                  }}
+                  className="dark:[&>div]:!bg-slate-800/95 dark:[&>div]:!text-slate-100"
+                />
                 <Legend />
                 <Line 
                   type="monotone" 
                   dataKey="frequency" 
                   name={`Frequência do nome ${name}`}
                   stroke="#3b82f6" 
-                  strokeWidth={2}
-                  activeDot={{ r: 8 }} 
+                  strokeWidth={3}
+                  activeDot={{ r: 8, fill: "#3b82f6" }} 
                 />
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-gray-500">
-              <p>Nenhum dado para exibir</p>
-              <p className="text-sm mt-2">Informe um nome e um período para visualizar o gráfico</p>
+            <div className="flex flex-col items-center justify-center h-[400px] text-contrast-subtle">
+              <div className="text-6xl mb-4 opacity-40">📈</div>
+              <p className="text-lg font-medium text-contrast-muted">Nenhum dado para exibir</p>
+              <p className="text-sm mt-2 text-center max-w-md text-contrast-subtle">
+                Informe um nome e um período para visualizar o gráfico
+              </p>
             </div>
           )}
         </div>
