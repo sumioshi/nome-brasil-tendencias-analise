@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,45 +16,79 @@ const LocationNames: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [locationName, setLocationName] = useState<string>('');
 
-  // Opções comuns de localidades
+  // Opções de estados e cidades
   const locationOptions = [
-    { value: '11', label: 'Rondônia (RO)' },
-    { value: '12', label: 'Acre (AC)' },
-    { value: '13', label: 'Amazonas (AM)' },
-    { value: '14', label: 'Roraima (RR)' },
-    { value: '15', label: 'Pará (PA)' },
-    { value: '16', label: 'Amapá (AP)' },
-    { value: '17', label: 'Tocantins (TO)' },
-    { value: '21', label: 'Maranhão (MA)' },
-    { value: '22', label: 'Piauí (PI)' },
-    { value: '23', label: 'Ceará (CE)' },
-    { value: '24', label: 'Rio Grande do Norte (RN)' },
-    { value: '25', label: 'Paraíba (PB)' },
-    { value: '26', label: 'Pernambuco (PE)' },
-    { value: '27', label: 'Alagoas (AL)' },
-    { value: '28', label: 'Sergipe (SE)' },
-    { value: '29', label: 'Bahia (BA)' },
-    { value: '31', label: 'Minas Gerais (MG)' },
-    { value: '32', label: 'Espírito Santo (ES)' },
-    { value: '33', label: 'Rio de Janeiro (RJ)' },
-    { value: '35', label: 'São Paulo (SP)' },
-    { value: '41', label: 'Paraná (PR)' },
-    { value: '42', label: 'Santa Catarina (SC)' },
-    { value: '43', label: 'Rio Grande do Sul (RS)' },
-    { value: '50', label: 'Mato Grosso do Sul (MS)' },
-    { value: '51', label: 'Mato Grosso (MT)' },
-    { value: '52', label: 'Goiás (GO)' },
-    { value: '53', label: 'Distrito Federal (DF)' },
-    { value: '3550308', label: 'São Paulo (Capital - SP)' },
-    { value: '3304557', label: 'Rio de Janeiro (Capital - RJ)' },
-    { value: '3106200', label: 'Belo Horizonte (MG)' },
-    { value: '4106902', label: 'Curitiba (PR)' },
-    { value: '4314902', label: 'Porto Alegre (RS)' },
-    { value: '2304400', label: 'Fortaleza (CE)' },
-    { value: '2927408', label: 'Salvador (BA)' },
-    { value: '5300108', label: 'Brasília (DF)' },
-    { value: '2611606', label: 'Recife (PE)' },
-    { value: '1302603', label: 'Manaus (AM)' },
+    // Estados
+    { value: '11', label: 'Rondônia (RO)', type: 'estado' },
+    { value: '12', label: 'Acre (AC)', type: 'estado' },
+    { value: '13', label: 'Amazonas (AM)', type: 'estado' },
+    { value: '14', label: 'Roraima (RR)', type: 'estado' },
+    { value: '15', label: 'Pará (PA)', type: 'estado' },
+    { value: '16', label: 'Amapá (AP)', type: 'estado' },
+    { value: '17', label: 'Tocantins (TO)', type: 'estado' },
+    { value: '21', label: 'Maranhão (MA)', type: 'estado' },
+    { value: '22', label: 'Piauí (PI)', type: 'estado' },
+    { value: '23', label: 'Ceará (CE)', type: 'estado' },
+    { value: '24', label: 'Rio Grande do Norte (RN)', type: 'estado' },
+    { value: '25', label: 'Paraíba (PB)', type: 'estado' },
+    { value: '26', label: 'Pernambuco (PE)', type: 'estado' },
+    { value: '27', label: 'Alagoas (AL)', type: 'estado' },
+    { value: '28', label: 'Sergipe (SE)', type: 'estado' },
+    { value: '29', label: 'Bahia (BA)', type: 'estado' },
+    { value: '31', label: 'Minas Gerais (MG)', type: 'estado' },
+    { value: '32', label: 'Espírito Santo (ES)', type: 'estado' },
+    { value: '33', label: 'Rio de Janeiro (RJ)', type: 'estado' },
+    { value: '35', label: 'São Paulo (SP)', type: 'estado' },
+    { value: '41', label: 'Paraná (PR)', type: 'estado' },
+    { value: '42', label: 'Santa Catarina (SC)', type: 'estado' },
+    { value: '43', label: 'Rio Grande do Sul (RS)', type: 'estado' },
+    { value: '50', label: 'Mato Grosso do Sul (MS)', type: 'estado' },
+    { value: '51', label: 'Mato Grosso (MT)', type: 'estado' },
+    { value: '52', label: 'Goiás (GO)', type: 'estado' },
+    { value: '53', label: 'Distrito Federal (DF)', type: 'estado' },
+    
+    // Principais cidades/capitais
+    { value: '3550308', label: '🏙️ São Paulo - SP', type: 'cidade' },
+    { value: '3304557', label: '🏙️ Rio de Janeiro - RJ', type: 'cidade' },
+    { value: '3106200', label: '🏙️ Belo Horizonte - MG', type: 'cidade' },
+    { value: '4106902', label: '🏙️ Curitiba - PR', type: 'cidade' },
+    { value: '4314902', label: '🏙️ Porto Alegre - RS', type: 'cidade' },
+    { value: '2304400', label: '🏙️ Fortaleza - CE', type: 'cidade' },
+    { value: '2927408', label: '🏙️ Salvador - BA', type: 'cidade' },
+    { value: '5300108', label: '🏙️ Brasília - DF', type: 'cidade' },
+    { value: '2611606', label: '🏙️ Recife - PE', type: 'cidade' },
+    { value: '1302603', label: '🏙️ Manaus - AM', type: 'cidade' },
+    { value: '2704302', label: '🏙️ Maceió - AL', type: 'cidade' },
+    { value: '2800308', label: '🏙️ Aracaju - SE', type: 'cidade' },
+    { value: '1600303', label: '🏙️ Macapá - AP', type: 'cidade' },
+    { value: '1200401', label: '🏙️ Rio Branco - AC', type: 'cidade' },
+    { value: '2507507', label: '🏙️ João Pessoa - PB', type: 'cidade' },
+    { value: '2408102', label: '🏙️ Natal - RN', type: 'cidade' },
+    { value: '2211001', label: '🏙️ Teresina - PI', type: 'cidade' },
+    { value: '2111300', label: '🏙️ São Luís - MA', type: 'cidade' },
+    { value: '1721000', label: '🏙️ Palmas - TO', type: 'cidade' },
+    { value: '1400100', label: '🏙️ Boa Vista - RR', type: 'cidade' },
+    { value: '1501402', label: '🏙️ Belém - PA', type: 'cidade' },
+    { value: '3205309', label: '🏙️ Vitória - ES', type: 'cidade' },
+    { value: '4205407', label: '🏙️ Florianópolis - SC', type: 'cidade' },
+    { value: '5002704', label: '🏙️ Campo Grande - MS', type: 'cidade' },
+    { value: '5103403', label: '🏙️ Cuiabá - MT', type: 'cidade' },
+    { value: '5208707', label: '🏙️ Goiânia - GO', type: 'cidade' },
+    { value: '1100205', label: '🏙️ Porto Velho - RO', type: 'cidade' },
+    
+    // Outras cidades importantes
+    { value: '3509502', label: '🌆 Campinas - SP', type: 'cidade' },
+    { value: '3518800', label: '🌆 Guarulhos - SP', type: 'cidade' },
+    { value: '3547809', label: '🌆 Santo André - SP', type: 'cidade' },
+    { value: '3552205', label: '🌆 São Bernardo do Campo - SP', type: 'cidade' },
+    { value: '3301702', label: '🌆 Duque de Caxias - RJ', type: 'cidade' },
+    { value: '3303500', label: '🌆 Nova Iguaçu - RJ', type: 'cidade' },
+    { value: '3303302', label: '🌆 Niterói - RJ', type: 'cidade' },
+    { value: '4113700', label: '🌆 Londrina - PR', type: 'cidade' },
+    { value: '4115200', label: '🌆 Maringá - PR', type: 'cidade' },
+    { value: '4209102', label: '🌆 Joinville - SC', type: 'cidade' },
+    { value: '3170206', label: '🌆 Uberlândia - MG', type: 'cidade' },
+    { value: '3118601', label: '🌆 Contagem - MG', type: 'cidade' },
   ];
 
   const validateLocationCode = (code: string): boolean => {
@@ -156,12 +189,33 @@ const LocationNames: React.FC = () => {
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um estado ou cidade" />
                 </SelectTrigger>
-                <SelectContent>
-                  {locationOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
+                <SelectContent className="max-h-[300px]">
+                  <div className="text-xs font-semibold text-gray-500 px-2 py-1 border-b">ESTADOS</div>
+                  {locationOptions
+                    .filter(option => option.type === 'estado')
+                    .map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  
+                  <div className="text-xs font-semibold text-gray-500 px-2 py-1 border-b border-t mt-2">CAPITAIS</div>
+                  {locationOptions
+                    .filter(option => option.type === 'cidade' && option.label.includes('🏙️'))
+                    .map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  
+                  <div className="text-xs font-semibold text-gray-500 px-2 py-1 border-b border-t mt-2">OUTRAS CIDADES</div>
+                  {locationOptions
+                    .filter(option => option.type === 'cidade' && option.label.includes('🌆'))
+                    .map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
               
