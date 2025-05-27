@@ -77,39 +77,39 @@ const NameEvolution: React.FC = () => {
   };
 
   return (
-    <Card className="card-enhanced rounded-2xl border-0 shadow-2xl relative overflow-hidden">
+    <Card className="card-enhanced rounded-2xl border-0 shadow-2xl relative overflow-hidden bg-white/95 dark:bg-slate-800/95">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/30 to-purple-50/30 dark:from-slate-800/95 dark:via-slate-700/30 dark:to-slate-600/30"></div>
       
       <CardHeader className="relative z-10 pb-6">
-        <CardTitle className="text-2xl font-bold text-contrast">
+        <CardTitle className="text-2xl font-bold text-slate-900 dark:text-slate-100">
           Evolução do Ranking de um Nome
         </CardTitle>
-        <CardDescription className="text-contrast-muted text-base">
+        <CardDescription className="text-slate-600 dark:text-slate-300 text-base">
           Informe um nome e defina um intervalo de décadas para analisar sua evolução
         </CardDescription>
       </CardHeader>
       <CardContent className="relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="md:col-span-2 space-y-3">
-            <Label htmlFor="name" className="text-sm font-semibold text-contrast">Nome</Label>
+            <Label htmlFor="name" className="text-sm font-semibold text-slate-900 dark:text-slate-100">Nome</Label>
             <Input
               id="name"
               placeholder="Ex: Maria, João, etc."
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="input-enhanced h-12 text-base rounded-xl"
+              className="input-enhanced h-12 text-base rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-500 placeholder:text-slate-500 dark:placeholder:text-slate-400"
             />
           </div>
           <div className="space-y-3">
-            <Label htmlFor="startDecade" className="text-sm font-semibold text-contrast">Década Inicial</Label>
+            <Label htmlFor="startDecade" className="text-sm font-semibold text-slate-900 dark:text-slate-100">Década Inicial</Label>
             <Select value={startDecade} onValueChange={setStartDecade}>
-              <SelectTrigger id="startDecade" className="input-enhanced h-12 rounded-xl">
+              <SelectTrigger id="startDecade" className="input-enhanced h-12 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-500">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600">
                 {decadeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-contrast">
+                  <SelectItem key={option.value} value={option.value} className="text-slate-900 dark:text-slate-100">
                     {option.label}
                   </SelectItem>
                 ))}
@@ -117,14 +117,14 @@ const NameEvolution: React.FC = () => {
             </Select>
           </div>
           <div className="space-y-3">
-            <Label htmlFor="endDecade" className="text-sm font-semibold text-contrast">Década Final</Label>
+            <Label htmlFor="endDecade" className="text-sm font-semibold text-slate-900 dark:text-slate-100">Década Final</Label>
             <Select value={endDecade} onValueChange={setEndDecade}>
-              <SelectTrigger id="endDecade" className="input-enhanced h-12 rounded-xl">
+              <SelectTrigger id="endDecade" className="input-enhanced h-12 rounded-xl bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-500">
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600">
                 {decadeOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value} className="text-contrast">
+                  <SelectItem key={option.value} value={option.value} className="text-slate-900 dark:text-slate-100">
                     {option.label}
                   </SelectItem>
                 ))}
@@ -141,7 +141,7 @@ const NameEvolution: React.FC = () => {
           Buscar Dados
         </Button>
         
-        <div className="mt-8 card-enhanced rounded-xl p-6">
+        <div className="mt-8 card-enhanced rounded-xl p-6 bg-white/95 dark:bg-slate-800/95">
           {loading ? (
             <Loading />
           ) : chartData.length > 0 ? (
@@ -187,10 +187,10 @@ const NameEvolution: React.FC = () => {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-contrast-subtle">
+            <div className="flex flex-col items-center justify-center h-[400px] text-slate-500 dark:text-slate-400">
               <div className="text-6xl mb-4 opacity-40">📈</div>
-              <p className="text-lg font-medium text-contrast-muted">Nenhum dado para exibir</p>
-              <p className="text-sm mt-2 text-center max-w-md text-contrast-subtle">
+              <p className="text-lg font-medium text-slate-600 dark:text-slate-300">Nenhum dado para exibir</p>
+              <p className="text-sm mt-2 text-center max-w-md text-slate-500 dark:text-slate-400">
                 Informe um nome e um período para visualizar o gráfico
               </p>
             </div>
