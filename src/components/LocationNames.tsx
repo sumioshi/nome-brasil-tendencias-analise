@@ -466,8 +466,9 @@ const LocationNames: React.FC = () => {
               Limpar Filtros
             </Button>
           </div>
-        </div>
-        
+        </CardContent>
+
+        {/* Seção de Resultados */}
         <div className="mt-8">
           {loading ? (
             <div className="flex justify-center py-12">
@@ -536,8 +537,7 @@ const LocationNames: React.FC = () => {
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </Card>
     </div>
   );
 };
