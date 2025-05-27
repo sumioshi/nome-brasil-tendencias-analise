@@ -174,7 +174,6 @@ const NameEvolution: React.FC = () => {
                     backdropFilter: 'blur(10px)',
                     color: '#1e293b'
                   }}
-                  className="dark:[&>div]:!bg-slate-800/95 dark:[&>div]:!text-slate-100"
                 />
                 <Legend />
                 <Line 
