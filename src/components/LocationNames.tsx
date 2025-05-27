@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import Loading from './Loading';
@@ -15,6 +16,47 @@ const LocationNames: React.FC = () => {
   const [rankingData, setRankingData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [locationName, setLocationName] = useState<string>('');
+
+  // Opções comuns de localidades
+  const locationOptions = [
+    { value: '11', label: 'Rondônia (RO)' },
+    { value: '12', label: 'Acre (AC)' },
+    { value: '13', label: 'Amazonas (AM)' },
+    { value: '14', label: 'Roraima (RR)' },
+    { value: '15', label: 'Pará (PA)' },
+    { value: '16', label: 'Amapá (AP)' },
+    { value: '17', label: 'Tocantins (TO)' },
+    { value: '21', label: 'Maranhão (MA)' },
+    { value: '22', label: 'Piauí (PI)' },
+    { value: '23', label: 'Ceará (CE)' },
+    { value: '24', label: 'Rio Grande do Norte (RN)' },
+    { value: '25', label: 'Paraíba (PB)' },
+    { value: '26', label: 'Pernambuco (PE)' },
+    { value: '27', label: 'Alagoas (AL)' },
+    { value: '28', label: 'Sergipe (SE)' },
+    { value: '29', label: 'Bahia (BA)' },
+    { value: '31', label: 'Minas Gerais (MG)' },
+    { value: '32', label: 'Espírito Santo (ES)' },
+    { value: '33', label: 'Rio de Janeiro (RJ)' },
+    { value: '35', label: 'São Paulo (SP)' },
+    { value: '41', label: 'Paraná (PR)' },
+    { value: '42', label: 'Santa Catarina (SC)' },
+    { value: '43', label: 'Rio Grande do Sul (RS)' },
+    { value: '50', label: 'Mato Grosso do Sul (MS)' },
+    { value: '51', label: 'Mato Grosso (MT)' },
+    { value: '52', label: 'Goiás (GO)' },
+    { value: '53', label: 'Distrito Federal (DF)' },
+    { value: '3550308', label: 'São Paulo (Capital - SP)' },
+    { value: '3304557', label: 'Rio de Janeiro (Capital - RJ)' },
+    { value: '3106200', label: 'Belo Horizonte (MG)' },
+    { value: '4106902', label: 'Curitiba (PR)' },
+    { value: '4314902', label: 'Porto Alegre (RS)' },
+    { value: '2304400', label: 'Fortaleza (CE)' },
+    { value: '2927408', label: 'Salvador (BA)' },
+    { value: '5300108', label: 'Brasília (DF)' },
+    { value: '2611606', label: 'Recife (PE)' },
+    { value: '1302603', label: 'Manaus (AM)' },
+  ];
 
   const validateLocationCode = (code: string): boolean => {
     const trimmedCode = code.trim();
@@ -34,7 +76,7 @@ const LocationNames: React.FC = () => {
     const trimmedLocation = location.trim();
     
     if (!trimmedLocation) {
-      toast.error('Por favor, informe um código de localidade');
+      toast.error('Por favor, selecione ou informe um código de localidade');
       return;
     }
     
@@ -68,9 +110,10 @@ const LocationNames: React.FC = () => {
       
       setRankingData(processedData);
       
-      // Melhorar a exibição do nome da localidade
-      const locationDisplayName = response[0].localidade === trimmedLocation 
-        ? `Código ${trimmedLocation}` 
+      // Encontrar o nome da localidade selecionada
+      const selectedOption = locationOptions.find(opt => opt.value === trimmedLocation);
+      const locationDisplayName = selectedOption 
+        ? selectedOption.label 
         : response[0].localidade || `Código ${trimmedLocation}`;
       
       setLocationName(locationDisplayName);
@@ -92,6 +135,10 @@ const LocationNames: React.FC = () => {
     }
   };
 
+  const handleSelectChange = (value: string) => {
+    setLocation(value);
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -104,14 +151,30 @@ const LocationNames: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="md:col-span-3">
             <Label htmlFor="location">Código da Localidade</Label>
-            <Input
-              id="location"
-              placeholder="Ex: 33 (Rio de Janeiro) ou 3304557 (Rio de Janeiro cidade)"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              onKeyPress={handleKeyPress}
-              className="mt-1"
-            />
+            <div className="mt-1 space-y-3">
+              <Select onValueChange={handleSelectChange} value={location}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um estado ou cidade" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locationOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <div className="relative">
+                <Input
+                  id="location"
+                  placeholder="Ou digite um código personalizado (ex: 33 ou 3304557)"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                />
+              </div>
+            </div>
             <div className="text-xs text-gray-500 mt-2 space-y-1">
               <p><strong>Estados (UF):</strong> Use 2 dígitos - Ex: 33 (RJ), 35 (SP), 31 (MG)</p>
               <p><strong>Municípios:</strong> Use 7 dígitos - Ex: 3304557 (Rio de Janeiro), 3550308 (São Paulo)</p>
@@ -168,7 +231,7 @@ const LocationNames: React.FC = () => {
             <div className="flex flex-col items-center justify-center h-[300px] text-gray-500 border border-dashed border-gray-200 rounded-lg">
               <div className="text-center">
                 <p className="text-lg font-medium">Nenhum dado para exibir</p>
-                <p className="text-sm mt-2">Digite um código de localidade válido e clique em "Buscar Dados"</p>
+                <p className="text-sm mt-2">Selecione uma localidade no dropdown ou digite um código válido</p>
                 <div className="mt-4 text-xs space-y-1">
                   <p><strong>Exemplos de códigos válidos:</strong></p>
                   <p>• 33 (Estado do Rio de Janeiro)</p>
