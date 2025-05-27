@@ -67,8 +67,14 @@ const LocationNames: React.FC = () => {
       }
       
       setRankingData(processedData);
-      setLocationName(response[0].localidade || 'Localidade');
-      toast.success(`Dados carregados com sucesso para ${response[0].localidade || 'a localidade'}`);
+      
+      // Melhorar a exibição do nome da localidade
+      const locationDisplayName = response[0].localidade === trimmedLocation 
+        ? `Código ${trimmedLocation}` 
+        : response[0].localidade || `Código ${trimmedLocation}`;
+      
+      setLocationName(locationDisplayName);
+      toast.success(`Dados carregados com sucesso para ${locationDisplayName}`);
       
     } catch (error) {
       console.error('Error fetching location names data:', error);
@@ -91,7 +97,7 @@ const LocationNames: React.FC = () => {
       <CardHeader>
         <CardTitle>Ranking de Nomes por Localidade</CardTitle>
         <CardDescription>
-          Consulte os três nomes mais frequentes por período em uma localidade específica
+          Consulte os três nomes mais frequentes em uma localidade específica (dados consolidados de todos os períodos)
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -132,39 +138,28 @@ const LocationNames: React.FC = () => {
               </h3>
               <Table>
                 <TableCaption>
-                  Ranking dos 3 nomes mais populares por período na localidade selecionada
+                  Ranking dos 3 nomes mais populares na localidade selecionada (dados consolidados)
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[120px]">Período</TableHead>
                     <TableHead>Nome</TableHead>
                     <TableHead className="w-[80px]">Ranking</TableHead>
                     <TableHead className="text-right w-[120px]">Frequência</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {rankingData.map((period) => (
-                    period.names.map((nameItem, nameIndex) => (
-                      <TableRow key={`${period.period}-${nameItem.name}`}>
-                        {nameIndex === 0 ? (
-                          <TableCell 
-                            rowSpan={period.names.length} 
-                            className="font-medium align-top"
-                          >
-                            {period.period}
-                          </TableCell>
-                        ) : null}
-                        <TableCell className="font-medium">{nameItem.name}</TableCell>
-                        <TableCell className="text-center">
-                          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-semibold">
-                            {nameItem.ranking}°
-                          </span>
-                        </TableCell>
-                        <TableCell className="text-right font-mono">
-                          {new Intl.NumberFormat('pt-BR').format(nameItem.frequency)}
-                        </TableCell>
-                      </TableRow>
-                    ))
+                  {rankingData[0]?.names.map((nameItem) => (
+                    <TableRow key={nameItem.name}>
+                      <TableCell className="font-medium">{nameItem.name}</TableCell>
+                      <TableCell className="text-center">
+                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-semibold">
+                          {nameItem.ranking}°
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right font-mono">
+                        {new Intl.NumberFormat('pt-BR').format(nameItem.frequency)}
+                      </TableCell>
+                    </TableRow>
                   ))}
                 </TableBody>
               </Table>
